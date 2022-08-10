@@ -7,22 +7,41 @@ import Logo from "./img/logo.png";
 import { get, remove } from "../src/rutas/token";
 
 import { FaBars, FaTimes } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
+import { ActionCerrarSesion } from './redux/Actions';
 
 const Header = (props: any) => {
   const dispatch = useDispatch();
- 
-  const [Redirect, setRedirect] = useState(false);
+  const token = get();
+  const [RedirectText, setRedirect] = useState("Cerrar Sesión");
+   const cerraSesion=  useSelector((state : RootStateOrAny) => state.todos.sesion);
 
+
+useEffect(() => {
+  if (token) {
+    <Navigate to="/usuarios" replace={true}></Navigate> 
+}
+}, [])
+
+      
 
   const handleDestroy = (event: any): void => {
     event.preventDefault();
     sessionStorage.removeItem("token");
-   <Navigate to="/ingreso" replace={true}/>
-  
-
+    dispatch(ActionCerrarSesion(false));
+    setRedirect("Cerrando...");
+    setTimeout(() => {
+    setRedirect("Cerrar Sesión");
+      <Navigate to="/ingreso"
+        replace={true}></Navigate>
+    }, 1200);
 
   };
+
+
+
+ 
+  
 
   const [clicked, setclicked] = useState(false);
   const handleclicked = () => setclicked(!clicked);
@@ -45,11 +64,7 @@ const Header = (props: any) => {
 
           <ul className={clicked ? "nav-menu active" : "nav-menu"}>
             {" "}
-            {/* <li className="nav-item">
-              <NavLink activeClassName="active" className="nav-item" to="/">
-                Home
-              </NavLink>
-            </li> */}
+          
             <li className="nav-item">
               <NavLink
                 className="nav-item"
@@ -59,18 +74,10 @@ const Header = (props: any) => {
                 usuarios
               </NavLink>
             </li>
-            {sessionStorage.getItem("token") ? (
-              <li className="nav-item">
-                <a
-                  className="nav-item"
-                  href="#"
-                  onClick={(event) => handleDestroy(event)}
-                  data-testid="header__link-signout"
-                >
-                  Cerrar Sesión
-                </a>
-              </li>
-            ) : (
+
+         
+
+              {cerraSesion === false ?
               <li className="nav-item">
                 <NavLink
                   className="nav-item"
@@ -80,18 +87,19 @@ const Header = (props: any) => {
                   ingreso
                 </NavLink>
               </li>
-            )}
-            {/* <li className="nav-item">
-                        <a className="nav-item" href="#"
-                            onClick={handleDestroy}
-                            data-testid="header__link-signout">/cerrar Sesión/</a>
-                    </li>
-
-                    <li className="nav-item">
-                        <NavLink activeClassName="active" className="nav-item" to="/ingreso/" data-testid="header__link-login">
-                            /ingreso/
-                        </NavLink>
-                    </li> */}
+              :
+              <li className="nav-item">
+              <NavLink
+             className="nav-item"
+             to="/ingreso"
+             onClick={ handleDestroy}
+             data-testid="header__link-signout"
+           >
+            {RedirectText} 
+             </NavLink>
+         </li>
+            }
+           
             <li className="nav-item">
               <NavLink
                 className="nav-item"

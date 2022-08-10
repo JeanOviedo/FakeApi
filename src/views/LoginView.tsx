@@ -11,7 +11,7 @@ import "../css/Home.css";
 
 function LoginView(props : any) {
     const token = get();
-
+    let   url=window.location.pathname;
     const [password, setPasword] = useState("");
     const dispatch = useDispatch();
     const [errorEmail, setErrorEmail] = useState("");
@@ -19,7 +19,11 @@ function LoginView(props : any) {
     const [Redirect, setRedirect] = useState(false);
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
+    const Sesion=  useSelector((state : RootStateOrAny) => state.todos.sesion);
     // const modal = useSelector((state : RootStateOrAny) => state.todos.modal);
+
+
+
 
 
     const handleLogin = (evento : any) => {
@@ -37,8 +41,11 @@ function LoginView(props : any) {
             setLoading(true);
             dispatch(actionLoginUsuarios(email, password));
             dispatch(ActionLoading(true));
+
             setTimeout(() => {
                 setRedirect(true);
+                <Navigate to="/crear"
+            replace={true}></Navigate>
             }, 2000);
 
 
@@ -47,12 +54,12 @@ function LoginView(props : any) {
     };
 
     return (
-        <div> {/* {token !=="" ? <Redirect to={{ pathname: "/usuarios" }} /> :"" } */}
-            {/* {modal.visible ? <ModalView></ModalView> : ""} */}
+        <div>  
             {
-            Redirect == true && <Navigate to="/usuarios"
-                replace={true}/>
-        }
+                Sesion && url === "/ingreso" ?
+                <Navigate to="/usuarios" replace={true}></Navigate>  : ""
+            
+            }
             <div className="container" id="container">
                 <div className="center" id="container">
                     <img src={Ima}

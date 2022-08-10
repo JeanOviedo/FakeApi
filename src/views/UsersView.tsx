@@ -1,9 +1,9 @@
 import {useState, useEffect, useMemo} from "react";
 import Table from "../Table";
-import {ActionLoading,  actionUsuarios} from "../redux/Actions";
+import {ActionCerrarSesion, ActionLoading, actionUsuarios} from "../redux/Actions";
 import {useSelector, useDispatch, RootStateOrAny} from "react-redux";
 import {get} from "../rutas/token";
-import { Navigate } from "react-router";
+import {Navigate} from "react-router";
 
 // Los valores que deberá tener la propiedad “data-testid” en los elementos HTML son:
 
@@ -14,9 +14,9 @@ import { Navigate } from "react-router";
 // un botón por cada página con el número de la página como texto data-testid="users__btn-page-" concatenado con el número de la página
 
 export default function UsersView(props : any) {
-    
- 
-       const token = get();
+
+
+    const token = get();
     // const [load, setLoading] = useState(false);
     const load = useSelector((state : RootStateOrAny) => state.todos.loading);
     const [users, setUsers] = useState([]);
@@ -24,6 +24,7 @@ export default function UsersView(props : any) {
     const [totalPages, setTotalPages] = useState(0);
     const dispatch = useDispatch();
     const [Redirect, setRedirect] = useState(get());
+    const cerraSesion=  useSelector((state : RootStateOrAny) => state.todos.sesion);
     const DATA = useSelector((state : RootStateOrAny) => state.todos.usuario);
     const columns = useMemo(() => [
         {
@@ -48,24 +49,24 @@ export default function UsersView(props : any) {
     ], []);
 
     // useEffect(() => {
-       
+
     //     if (token == null) {
     //        <Navigate to="/ingreso"
     //            replace={true}></Navigate>;
     //     }
-    //  }, []);
+    // }, []);
     useEffect(() => {
-      dispatch(ActionLoading(true));
-     dispatch(actionUsuarios(page));
-       
+        dispatch(ActionLoading(true));
+        dispatch(actionUsuarios(page));
+        // dispatch(ActionCerrarSesion(true));
+
         if (DATA !== undefined) {
             setUsers(DATA.data);
             setTotalPages(DATA.total_pages);
-       
+
         }
 
 
-       
         // useEffect(() => {
         //     let token = get();
         //     if (token == null) {
@@ -73,22 +74,25 @@ export default function UsersView(props : any) {
         //             replace={true}></Navigate>;
         //     }
         // }, []);
-      
+
 
         if (!load) 
             dispatch(actionUsuarios(page));
         
 
+
     }, [page]);
 
     const handleCreate = (event : any) : void => {
-        event.preventDefault();
-        <Navigate to="/crear"  replace={true}></Navigate>
+        event.preventDefault(); <Navigate to="/crear"
+            replace={true}></Navigate>
     };
+
+   
 
     return (
         <div>
-           
+
             <h1 data-testid="users__title">/usuarios/</h1>
             <br/>
             <button type="button" className="button-4"
@@ -103,18 +107,23 @@ export default function UsersView(props : any) {
                 Crear usuario
             </button>
             <br></br>
-           { users != undefined ? 
-              <Table columns={columns}
-              data={users}
-              className="table"/> : ";"
-            }
+            {
+            users != undefined ? <Table columns={columns}
+                data={users}
+                className="table"/> : ";"
+        }
+         {
+            cerraSesion === false ? <Navigate to="/ingreso"
+            replace={true}></Navigate> : ";"
+        }
+
             <div>
                 <nav aria-label="Page navigation example"
                     style={
                         {float: "right"}
                 }>
                     <ul className="pagination">
-                    {
+                        {
                         page > 1 ? (
                             <li className="item">
                                 <button className="button-4"

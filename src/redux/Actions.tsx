@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Navigate } from "react-router";
 
-import { USUARIO, MODAL, MODALINFO, ERROR, LOADING } from "./Types";
+import { USUARIO, MODAL, MODALINFO, ERROR, LOADING ,SESION } from "./Types";
 
 export function ActionModalInfo(valor: any) {
   console.log("MODALINFO    ss-----------", valor);
@@ -16,6 +16,11 @@ export function actionModal(valor: any) {
 export function ActionLoading(valor: any) {
   console.log("LOADING-----------", valor);
   return { type: LOADING, payload: valor };
+}
+
+export function ActionCerrarSesion(valor: any) {
+  console.log("SESION-----------", valor);
+  return { type: SESION, payload: valor };
 }
 
 export function CloseModal(valor: any) {
@@ -33,6 +38,8 @@ export function actionUsuarios(valor: any) {
       });
 
       dispatch({ type: USUARIO, payload: response.data });
+      dispatch( { type: SESION, payload: true });
+     
       console.log("NUEVA DATA", response.data.data);
       dispatch({ type: LOADING, payload: false });
     } catch (error) {
@@ -110,8 +117,11 @@ export function actionLoginUsuarios(valor: any, valor2: any) {
       if (response.data.token) {
         dispatch({ type: "LOGIN", payload: false });
         sessionStorage.setItem("token", response.data.token);
-        return <Navigate to="/usuarios" />;
-
+        dispatch( { type: SESION, payload: true });
+        return <Navigate to="/usuarios" replace={true} />
+       
+       
+      
         // history.push("/ingreso");
         // history.push("/usuarios");
         //     dispatch({type: MODAL, payload: {

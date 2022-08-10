@@ -1,9 +1,10 @@
-import {MODAL, USUARIO, ERROR, LOADING} from "./Types";
+import {MODAL, USUARIO, ERROR, LOADING , SESION} from "./Types";
 const initialState = {
     usuario: [],
     modal: [],
     error: "",
-    loading: false
+    loading: false,
+    sesion: false,
 
 
 };
@@ -21,6 +22,14 @@ export default function rooReducer(state = initialState, action : any) {
 
 
             };
+
+            case SESION:
+                return {
+                    ... state,
+                    sesion: action.payload
+    
+    
+                };
         case LOADING:
             return {
                 ... state,
