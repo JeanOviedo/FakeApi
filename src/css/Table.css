@@ -1,0 +1,73 @@
+table {
+  margin: 20px;
+  border-collapse: collapse;
+  border-radius: 1em;
+  overflow: hidden;
+  table-layout: auto;
+  width: 98%;
+  align-items: center;
+  text-align: center;
+}
+
+th,
+td {
+  padding: 1em;
+  background: rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(167, 164, 164);
+}
+
+.css-mine {
+  margin-top: 2em;
+  clear: both;
+}
+
+body {
+  margin: 1.5em;
+}
+
+@media screen and (max-width: 768px) {
+  table {
+    border: 0;
+    width: 90%;
+  }
+  table thead {
+   
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+  
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: center;
+  }
+  
+  table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  table td:last-child {
+    border-bottom: 0;
+  }
+  
+}
